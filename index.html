@@ -291,6 +291,24 @@
     animation: flow-anim 3s linear infinite;
   }
   @keyframes flow-anim { to { stroke-dashoffset: -24; } }
+
+  /* ── Logo Animation ── */
+  .logo-animation-container {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .grid-line { opacity: 0; }
+  .scanner { position: absolute; top: 0; bottom: 0; width: 2px; background: #00A3FF; box-shadow: 0 0 30px rgba(0,163,255,0.8); z-index: 10; opacity: 0; }
+  .const-line { opacity: 0; }
+  .logo-stroke { stroke-dasharray: 1000; stroke-dashoffset: 1000; opacity: 0; }
+  .blue-stroke { stroke-dasharray: 1000; stroke-dashoffset: 1000; opacity: 0; }
+  .logo-fill { fill-opacity: 0; }
+  .blue-fill { fill-opacity: 0; filter: drop-shadow(0px 0px 12px rgba(0, 163, 255, 0.5)); }
+  .metallic-sweep { transform: translateX(-100%); }
+
 </style>
 </head>
 <body class="text-slate-100 relative">
@@ -304,9 +322,12 @@
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-all duration-300">
   <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
     <a href="#" class="flex items-center gap-2 font-display font-bold text-lg tracking-tight">
-      <span class="w-8 h-8 bg-primary rounded-md flex items-center justify-center glow-sm">
-        <span class="material-symbols-outlined text-white text-base">terminal</span>
-      </span>
+      
+      <svg viewBox="0 0 200 200" class="w-8 h-8">
+        <path d="M 50 50 L 100 50 A 30 30 0 0 1 130 80 A 30 30 0 0 1 100 110 L 120 130 L 150 130 L 150 150 L 115 150 L 75 110 L 70 110 L 70 150 L 50 150 Z M 70 70 L 70 90 L 100 90 A 10 10 0 0 0 110 80 A 10 10 0 0 0 100 70 Z" fill="white" />
+        <path d="M 75 150 L 75 115 L 110 150 L 100 150 L 85 135 L 85 150 Z" fill="#00A3FF" />
+      </svg>
+
       <span>RESIDUAL<span class="text-primary ml-1 font-mono text-xs font-normal align-middle">LABS</span></span>
     </a>
 
@@ -999,6 +1020,28 @@ const countObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.5 });
 document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
+
+
+// ── Logo Animation GSAP ──
+function runLogoAnimation(containerSelector) {
+  const tl = gsap.timeline();
+  
+  // Reset states
+  gsap.set(".grid-line, .const-line, .scanner, .logo-stroke, .blue-stroke", { opacity: 0 });
+  gsap.set(".logo-fill, .blue-fill", { fillOpacity: 0 });
+  
+  tl.to(".grid-line", { opacity: 0.08, duration: 1.5, stagger: 0.02, yoyo: true, repeat: 1 })
+    .to(".scanner", { left: "110%", opacity: 1, duration: 2.5, ease: "power2.inOut" }, 0)
+    .to(".const-line", { opacity: 0.4, duration: 1.5, stagger: 0.05, yoyo: true, repeat: 1 }, 0.5)
+    .to(".logo-stroke", { strokeDashoffset: 0, opacity: 1, duration: 1.5, ease: "power2.inOut" }, 1.0)
+    .to(".blue-stroke", { strokeDashoffset: 0, opacity: 1, duration: 1.0, ease: "power2.inOut" }, 2.0)
+    .to(".logo-fill", { fillOpacity: 1, duration: 1.0, ease: "power2.out" }, 3.0)
+    .to(".blue-fill", { fillOpacity: 1, duration: 1.0, ease: "power2.out" }, 3.2)
+    .to(".logo-stroke, .blue-stroke", { opacity: 0, duration: 1.0 }, 3.5)
+    .to(".logo-container", { scale: 1.015, duration: 0.1, yoyo: true, repeat: 3 }, 4.5)
+    .to(".metallic-sweep", { x: "200%", duration: 1.5, ease: "power2.inOut" }, 4.9);
+}
+
 
 // ── Hero GSAP animations ──
 document.addEventListener('DOMContentLoaded', () => {
