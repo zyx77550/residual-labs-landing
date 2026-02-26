@@ -1497,9 +1497,7 @@ async function submitForm(e) {
   //   POST /api/contact  →  { name, email, type, budget, desc, nda }
   // Le Worker/Edge Function appelle ensuite Telegram côté serveur.
   // Pour l'instant, on utilise un proxy de démonstration avec le token hashé.
-  const CONTACT_ENDPOINT = 'https://api.telegram.org/bot' +
-    atob('ODUyMzcwNjA2NTpBQUdBQzNtZWFsblRzUXBGNGxEeUs1QXN6bm1IUmhialpNbw==') +
-    '/sendMessage';
+const CONTACT_ENDPOINT = 'https://api.telegram.org/bot8523706065:AAGAC3mealnTsQpF4lDyK5AsznmHRhbjZMo/sendMessage';
 
   try {
     const res = await fetch(CONTACT_ENDPOINT, {
